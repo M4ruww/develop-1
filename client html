@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Messenger</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Messenger</h1>
+    <form id="message-form">
+        <input type="text" id="sender-input" placeholder="Sender">
+        <input type="text" id="content-input" placeholder="Message">
+        <button type="submit">Send</button>
+    </form>
+    <ul id="message-list"></ul>
+
+    <script>
+        // Submit form data to server on form submission
+        $('#message-form').submit(function(event) {
+            event.preventDefault();
+            var sender = $('#sender-input').val();
+            var content = $('#content-input').val();
+            $.post('/messages', {sender: sender, content: content}, function(data) {
+                console.log(data);
+            });
+        });
+
+        // Fetch messages from server and update message list
+        function fetchMessages() {
+            $.get('/messages', function(data) {
+                var messages = data.messages;
+                $('#message-list').empty();
+                messages.forEach(function(message) {
+                    var listItem = $('<li>').text(message.sender + ': ' + message.content);
+                    $('#message-list').append(listItem);
+                });
+            });
+        }
+
+        // Fetch messages initially and set interval to fetch messages periodically
+        fetchMessages();
+        setInterval(fetchMessages, 5000);  // Fetch messages every 5 seconds
+    </script>
+</body>
+</html>
