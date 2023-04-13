@@ -1,0 +1,22 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+messages = []
+
+@app.route('/messages', methods=['POST'])
+def post_message():
+    data = request.get_json()
+    message = {
+        'sender': data['sender'],
+        'content': data['content']
+    }
+    messages.append(message)
+    return jsonify({'status': 'success'})
+
+@app.route('/messages', methods=['GET'])
+def get_messages():
+    return jsonify({'messages': messages})
+
+if __name__ == '__main__':
+    app.run(debug=True)
