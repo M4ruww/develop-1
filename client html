@@ -24,7 +24,7 @@
             });
         });
 
-        // Fetch messages from server and update message list
+        // Fetch messages from server and update message list here
         function fetchMessages() {
             $.get('/messages', function(data) {
                 var messages = data.messages;
